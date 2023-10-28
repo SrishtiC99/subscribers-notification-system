@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>discovery-server</module>
+        <module>auth-service</module>
     </modules>
 
     <properties>

@@ -3,6 +3,9 @@
 discovery-server/target/
 discovery-server/src/test/
 
+auth-service/target/
+auth-service/src/test/
+
 .idea/
 
 
