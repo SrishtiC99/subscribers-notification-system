@@ -4,4 +4,10 @@
 > receive the notification on their preferred options (email/phone/telegram)
 
 **Tech Stacks:**
-> `Maven Build System` `Spring boot Framework`
+> `Maven Build System` `Spring boot Framework` `postgresSQL DB`
+
+### Discovery Server
+hosting all the services
+
+### Auth Service
+- New User Registration, User Authentication, Returning custom exception in case of failure

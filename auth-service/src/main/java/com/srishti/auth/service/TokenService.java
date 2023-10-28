@@ -2,6 +2,9 @@ package com.srishti.auth.service;
 
 import com.srishti.auth.entity.Token;
 import com.srishti.auth.entity.User;
+import com.srishti.auth.exception.token.InvalidTokenException;
+import com.srishti.auth.exception.user.UserJwtNotFoundException;
+import com.srishti.auth.exception.user.UserNotFoundException;
 import com.srishti.auth.repository.TokenRepository;
 import com.srishti.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +37,16 @@ public class TokenService {
         if (isTokenValid && jwtService.isJwtValid(jwtToken, user)) {
             return true;
         } else {
-            return true;
-            //throw new InvalidTokenException(message.getProperty("jwt.invalid"));
+            throw new InvalidTokenException("Invalid Jwt Token");
         }
     }
 
     public User takeUserDetailsFromJwt(String jwt) {
         String email = jwtService.extractEmail(jwt);
-        // handle exception
-        return authService.loadUserByUsername(email);
+        try {
+            return authService.loadUserByUsername(email);
+        } catch (UserNotFoundException e) {
+            throw new UserJwtNotFoundException(e.getMessage());
+        }
     }
 }

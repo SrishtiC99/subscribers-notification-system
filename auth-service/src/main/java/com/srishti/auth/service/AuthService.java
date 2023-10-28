@@ -3,6 +3,9 @@ package com.srishti.auth.service;
 import com.srishti.auth.dto.request.AuthRequest;
 import com.srishti.auth.dto.response.TokenResponse;
 import com.srishti.auth.entity.User;
+import com.srishti.auth.exception.user.UserBadCredentialsException;
+import com.srishti.auth.exception.user.UserEmailAlreadyExistsException;
+import com.srishti.auth.exception.user.UserNotFoundException;
 import com.srishti.auth.mapper.UserMapper;
 import com.srishti.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +40,7 @@ public class AuthService implements UserDetailsService {
         return Optional.of(userRepository.findByEmail(request.email()))
                 .map(user -> {
                     if (user.isPresent()) {
-                        // throw exception
-                        return request;
+                        throw new UserEmailAlreadyExistsException("The email provided is already registered in our system.");
                     } else {
                         return request;
                     }
@@ -57,9 +59,9 @@ public class AuthService implements UserDetailsService {
                     )
             );
         } catch (InternalAuthenticationServiceException e) {
-            // throw exception
+            throw new UserNotFoundException("User ${request.email()} not found");
         } catch (BadCredentialsException e) {
-            // throw exception
+            throw new UserBadCredentialsException("Wrong Password");
         }
 
         User user = loadUserByUsername(request.email());
@@ -71,6 +73,7 @@ public class AuthService implements UserDetailsService {
     }
 
     public User loadUserByUsername(String email) {
-        return userRepository.findByEmail(email).orElseThrow(/* throw exception here */);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User ${email} not found"));
     }
 }
