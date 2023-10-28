@@ -1,7 +1,7 @@
 ## my setup
 
-!**/src/main/**/target/
-!**/src/test/**/target/
+discovery-server/target/
+discovery-server/src/test/
 
 .idea/
 
