@@ -1,0 +1,8 @@
+## my setup
+
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+.idea/
+
+
