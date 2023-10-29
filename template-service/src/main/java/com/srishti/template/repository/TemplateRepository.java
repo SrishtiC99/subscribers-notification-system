@@ -11,4 +11,6 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
 
     Optional<Template> findByIdAndOwnerId(Long templateId, Long ownerId);
 
+    Boolean existsTemplateByOwnerIdAndTitle(Long ownerId, String title);
+
 }
