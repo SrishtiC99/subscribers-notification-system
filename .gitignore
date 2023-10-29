@@ -6,6 +6,9 @@ discovery-server/src/test/
 auth-service/target/
 auth-service/src/test/
 
+gateway/target/
+gateway/src/test/
+
 .idea/
 
 
