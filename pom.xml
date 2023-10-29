@@ -19,6 +19,7 @@
         <module>discovery-server</module>
         <module>auth-service</module>
         <module>gateway</module>
+        <module>template-service</module>
     </modules>
 
     <properties>

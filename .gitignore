@@ -9,6 +9,9 @@ auth-service/src/test/
 gateway/target/
 gateway/src/test/
 
+template-service/target/
+template-service/src/test/
+
 .idea/
 
 
