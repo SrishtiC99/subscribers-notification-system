@@ -43,6 +43,7 @@ public class TokenService {
 
     public User takeUserDetailsFromJwt(String jwt) {
         String email = jwtService.extractEmail(jwt);
+        System.out.println(email);
         try {
             return authService.loadUserByUsername(email);
         } catch (UserNotFoundException e) {

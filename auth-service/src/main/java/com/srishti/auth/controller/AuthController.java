@@ -32,6 +32,7 @@ public class AuthController {
     @GetMapping("/validate")
     public ResponseEntity<Long> isTokenValid(
             @AuthenticationPrincipal User user) {
+        System.out.println("Api gateway validating request: " + user.getEmail());
         return ResponseEntity.ok(user.getId());
     }
 }

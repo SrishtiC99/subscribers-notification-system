@@ -65,9 +65,10 @@ public class AuthenticationGatewayFilterFactory extends
     }
 
     private ServerHttpRequest addUserIdHeader(Long userId, ServerWebExchange exchange) {
+        System.out.println("Adding owner: " + userId);
         return exchange.getRequest()
                 .mutate()
-                .header("userId", String.valueOf(userId))
+                .header("ownerId", String.valueOf(userId))
                 .build();
     }
 }

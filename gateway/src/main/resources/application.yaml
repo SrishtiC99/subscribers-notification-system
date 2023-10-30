@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: api-gateway
+  component-scan:
+    base-package: com.srishti.gateway.filter
+
   cloud:
     gateway:
       routes:
@@ -11,6 +14,13 @@ spring:
           uri: lb://AUTH-service
           predicates:
             - Path=/api/v1/auth/**
+
+        - id: template-service
+          uri: lb://TEMPLATE-service
+          predicates:
+            - Path=/api/v1/templates/**
+          filters:
+            - Authentication
 
 eureka:
   client:
