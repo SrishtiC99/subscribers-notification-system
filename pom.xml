@@ -20,6 +20,7 @@
         <module>auth-service</module>
         <module>gateway</module>
         <module>template-service</module>
+        <module>subscriber-service</module>
     </modules>
 
     <properties>

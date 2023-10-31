@@ -12,6 +12,9 @@ gateway/src/test/
 template-service/target/
 template-service/src/test/
 
+subscriber-service/target/
+subscriber-service/src/test/
+
 .idea/
 
 
