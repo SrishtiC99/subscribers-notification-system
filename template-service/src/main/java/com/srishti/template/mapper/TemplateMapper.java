@@ -1,5 +1,6 @@
 package com.srishti.template.mapper;
 
+import com.srishti.template.client.SubscriberClient;
 import com.srishti.template.dto.request.TemplateRequest;
 import com.srishti.template.dto.response.TemplateResponse;
 import com.srishti.template.entity.Template;
@@ -12,7 +13,7 @@ public interface TemplateMapper extends EntityMapper<Template, TemplateRequest, 
 
     @Mapping(
             target = "subscriberIds",
-            ignore = true
+            expression = "java(subscriberClient.getSubscribersByTemplateId(template.getOwnerId(), template.getId()).getBody())"
     )
-    TemplateResponse mapToResponse(Template template); //TODO: mapping for subscriberIds
+    TemplateResponse mapToResponse(Template template, @Context SubscriberClient subscriberClient);
 }

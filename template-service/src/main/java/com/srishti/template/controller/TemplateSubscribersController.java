@@ -1,7 +1,6 @@
 package com.srishti.template.controller;
 
 import com.srishti.template.dto.request.SubscriberListRequest;
-import com.srishti.template.dto.request.TemplateRequest;
 import com.srishti.template.dto.response.TemplateResponse;
 import com.srishti.template.service.TemplateSubscribersService;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ public class TemplateSubscribersController {
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId,
             @RequestBody @Valid SubscriberListRequest request) {
-        System.out.println("request 1");
         return ResponseEntity.ok(templateSubscribersService.addSubscribers(ownerId, templateId, request));
     }
 
@@ -30,7 +28,6 @@ public class TemplateSubscribersController {
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId,
             @RequestBody @Valid SubscriberListRequest request) {
-        System.out.println("request 2");
         return ResponseEntity.ok(templateSubscribersService.removeSubscribers(ownerId, templateId, request));
     }
 }

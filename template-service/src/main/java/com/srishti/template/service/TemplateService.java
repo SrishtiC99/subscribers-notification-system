@@ -1,5 +1,6 @@
 package com.srishti.template.service;
 
+import com.srishti.template.client.SubscriberClient;
 import com.srishti.template.dto.request.TemplateRequest;
 import com.srishti.template.dto.response.TemplateResponse;
 import com.srishti.template.entity.Template;
@@ -21,6 +22,8 @@ public class TemplateService {
 
     private final TemplateMapper mapper;
 
+    private final SubscriberClient subscriberClient;
+
     public TemplateResponse create(Long ownerId, TemplateRequest request) {
 
         if(templateRepository.existsTemplateByOwnerIdAndTitle(ownerId, request.title())) {
@@ -31,14 +34,14 @@ public class TemplateService {
                 .map(mapper::mapToEntity)
                 .map(template -> template.addOwner(ownerId))
                 .map(templateRepository::save)
-                .map(mapper::mapToResponse)
+                .map(template -> mapper.mapToResponse(template, subscriberClient))
                 .orElseThrow(() -> new TemplateCreationException("msg"));
     }
 
     public TemplateResponse get(Long ownerId, Long templateId) {
 
         return templateRepository.findByIdAndOwnerId(templateId, ownerId)
-                .map(mapper::mapToResponse)
+                .map(template -> mapper.mapToResponse(template, subscriberClient))
                 .orElseThrow(() -> new TemplateNotFoundException("template not found with id: " + templateId));
     }
 

@@ -35,13 +35,11 @@ public class TemplateSubscribersService {
                 .orElseThrow(() ->
                         new TemplateNotFoundException("template with id: " + templateId + " not found"));
 
-        System.out.println("got template");
         for(Long subscriberId: request.subscriberIds()) {
             if (subscriberIdRepository.existsByTemplateIdAndSubscriberId(templateId, subscriberId)) {
                 log.warn("Subscriber {} already registered for template {}", subscriberId, templateId);
                 continue;
             }
-            System.out.println("**");
             try {
                 Optional.of(subscriberClient.getSubscriberById(ownerId, subscriberId))
                         .map(ResponseEntity::getBody)
@@ -51,7 +49,7 @@ public class TemplateSubscribersService {
             }
         }
         templateRepository.save(template);
-        return mapper.mapToResponse(template);
+        return mapper.mapToResponse(template, subscriberClient);
     }
 
     public TemplateResponse removeSubscribers(Long ownerId, Long templateId,
@@ -71,6 +69,6 @@ public class TemplateSubscribersService {
             }
         }
         templateRepository.save(template);
-        return mapper.mapToResponse(template);
+        return mapper.mapToResponse(template, subscriberClient);
     }
 }
