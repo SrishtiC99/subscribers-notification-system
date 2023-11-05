@@ -2,6 +2,7 @@ package com.srishti.template.service;
 
 import com.srishti.template.dto.request.TemplateRequest;
 import com.srishti.template.dto.response.TemplateResponse;
+import com.srishti.template.entity.Template;
 import com.srishti.template.exception.template.TemplateCreationException;
 import com.srishti.template.exception.template.TemplateNotFoundException;
 import com.srishti.template.exception.template.TemplateTitleAlreadyExistsException;
@@ -23,7 +24,7 @@ public class TemplateService {
     public TemplateResponse create(Long ownerId, TemplateRequest request) {
 
         if(templateRepository.existsTemplateByOwnerIdAndTitle(ownerId, request.title())) {
-            throw new TemplateTitleAlreadyExistsException("Template title" + request.title() + "already exists");
+            throw new TemplateTitleAlreadyExistsException("Template title: " + request.title() + " already exists");
         }
 
         return Optional.of(request)
@@ -42,14 +43,10 @@ public class TemplateService {
     }
 
     public Boolean delete(Long ownerId, Long templateId) {
-        Optional.of(templateRepository.findByIdAndOwnerId(ownerId, templateId))
-                .map(template -> {
-                    if (!template.isPresent()) {
-                        throw new TemplateNotFoundException("Template does not exist");
-                    } else {
-                        return template;
-                    }
-                });
+        Template template = templateRepository.findByIdAndOwnerId(templateId, ownerId)
+                .orElseThrow(() -> new TemplateNotFoundException("template not found with id: " + templateId));
+
+        templateRepository.delete(template);
         return true;
     }
 }

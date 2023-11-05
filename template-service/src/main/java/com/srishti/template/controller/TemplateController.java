@@ -23,21 +23,17 @@ public class TemplateController {
         return ResponseEntity.status(HttpStatus.CREATED).body(templateService.create(ownerId, request));
     }
 
+    @GetMapping("/{id}")
     public ResponseEntity<TemplateResponse> get(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId) {
         return ResponseEntity.status(HttpStatus.OK).body(templateService.get(ownerId, templateId));
     }
 
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId) {
         return ResponseEntity.status(HttpStatus.OK).body(templateService.delete(ownerId, templateId));
-    }
-
-    @PostMapping("/dummy")
-    public String create(
-            @RequestBody @Valid TemplateRequest request) {
-        return "request sent successfully";
     }
 }

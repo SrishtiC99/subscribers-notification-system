@@ -1,6 +1,7 @@
 package com.srishti.gateway.config;
 
 
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import reactor.netty.http.client.HttpClient;
 
 import java.util.List;
 
@@ -17,26 +19,12 @@ import java.util.List;
 public class AppConfig {
 
     @Bean
-    public HttpMessageConverters httpMessageConverters() {
-        return new HttpMessageConverters(new GsonHttpMessageConverter());
-    }
-
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:8000", "http://localhost:3000"));
-        configuration.addAllowedMethod(HttpMethod.DELETE);
-        configuration.addAllowedMethod(HttpMethod.PATCH);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-
-        return new CorsWebFilter(source);
-    }
-
-    @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public HttpClient httpClient() {
+        return HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE);
     }
 }

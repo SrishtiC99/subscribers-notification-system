@@ -46,11 +46,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(conf -> conf.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(conf -> {
-                    conf.logoutUrl("/api/v1/auth/logout");
-                    conf.addLogoutHandler(logoutHandler);
-                    conf.logoutSuccessHandler((req, resp, auth) -> SecurityContextHolder.clearContext());
-                })
+//                .logout(conf -> {
+//                    conf.logoutUrl("/api/v1/auth/logout");
+//                    conf.addLogoutHandler(logoutHandler);
+//                    conf.logoutSuccessHandler((req, resp, auth) -> SecurityContextHolder.clearContext());
+//                })
                 .build();
     }
 

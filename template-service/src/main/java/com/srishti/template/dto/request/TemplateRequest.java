@@ -10,6 +10,6 @@ public record TemplateRequest (
         String title,
 
         @NotNull(message = "{template.content.not_null}") @Size(min = 5, max = 225, message = "{template.content.size}")
-        String Content
+        String content
 ){
 }

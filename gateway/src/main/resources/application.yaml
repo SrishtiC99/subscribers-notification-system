@@ -22,6 +22,13 @@ spring:
           filters:
             - Authentication
 
+        - id: subscriber-service
+          uri: lb://SUBSCRIBER-service
+          predicates:
+            - Path=/api/v1/subscribers/**
+          filters:
+            - Authentication
+
 eureka:
   client:
     service-url:
