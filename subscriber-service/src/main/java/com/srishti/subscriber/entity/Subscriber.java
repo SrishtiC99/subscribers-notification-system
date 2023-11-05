@@ -33,6 +33,8 @@ public class Subscriber implements BaseEntity<Long>{
 
     private String name;
 
+    private Geolocation geolocation;
+
     @Column(nullable = false)
     private String email;
 

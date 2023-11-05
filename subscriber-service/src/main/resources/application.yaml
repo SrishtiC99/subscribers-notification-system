@@ -9,15 +9,16 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5433/subscriber
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
       hibernate:
-        ddl-auto: update
-      show-sql: false
-      properties:
-        hibernate:
-          show_sql: false
-          format_sql: true
-          dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 eureka:
   client:
