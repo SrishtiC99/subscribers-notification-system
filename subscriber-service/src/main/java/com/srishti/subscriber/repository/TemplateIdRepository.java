@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface TemplateIdRepository extends JpaRepository<TemplateId, Long> {
     List<TemplateId> findAllBySubscriber_ownerIdAndTemplateId(Long clientId, Long templateId);
+
+    Boolean existsByTemplateIdAndSubscriberId(Long templateId, Long subscriberId);
 }

@@ -1,5 +1,6 @@
 package com.srishti.template.entity;
 
+import com.srishti.template.kafka.TemplateSubscribersUpdateEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ import lombok.NoArgsConstructor;
                         columnNames = {"template_id", "subscriberId"})
         }
 )
+@EntityListeners(TemplateSubscribersUpdateEvent.class)
 public class SubscriberId implements BaseEntity<Long>{
 
     @Id
