@@ -15,6 +15,9 @@ template-service/src/test/
 subscriber-service/target/
 subscriber-service/src/test/
 
+notification-service/target/
+notification-service/src/test/
+
 .idea/
 
 
