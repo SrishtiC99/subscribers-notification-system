@@ -18,6 +18,9 @@ subscriber-service/src/test/
 notification-service/target/
 notification-service/src/test/
 
+sender-service/target/
+sender-service/src/test/
+
 .idea/
 
 

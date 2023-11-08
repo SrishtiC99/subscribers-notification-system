@@ -22,6 +22,7 @@
         <module>template-service</module>
         <module>subscriber-service</module>
         <module>notification-service</module>
+        <module>sender-service</module>
     </modules>
 
     <properties>
