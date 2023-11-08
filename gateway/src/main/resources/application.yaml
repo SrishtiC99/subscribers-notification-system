@@ -29,6 +29,13 @@ spring:
           filters:
             - Authentication
 
+        - id: notification-service
+          uri: lb://NOTIFICATION-service
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - Authentication
+
 eureka:
   client:
     service-url:
