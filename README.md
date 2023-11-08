@@ -4,10 +4,25 @@
 > receive the notification on their preferred options (email/phone/telegram)
 
 **Tech Stacks:**
-> `Maven Build System` `Spring boot Framework` `postgresSQL DB`
+> `Maven Build System` `Spring boot Framework` `JWT Authentication` `postgresSQL DB` `Kafka Broker`
 
 ### Discovery Server
-hosting all the services
+Spring Eureka server is used for service registry by which the API gateway would discover the network information of 
+other services.
+
+### API Gateway
+Spring Cloud gateway is used for validating the api requests and directing it to the correct service. 
 
 ### Auth Service
-- New User Registration, User Authentication, Returning custom exception in case of failure
+- New User Registration, User Authentication, JWT Token Validation
+
+### Template Service
+- Create/Delete/Get a Template
+- Add/Remove list of Subscribers to a template
+- Realtime event driven update through kafka to subscriber-service after adding/removing subscribers to a template
+
+### Subscriber Service
+- Create/Update/Get/Delete a Subscriber
+
+### Notification Service
+- Sending notification to all the subscribers of a template through Kafka
