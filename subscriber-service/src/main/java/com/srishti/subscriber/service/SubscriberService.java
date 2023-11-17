@@ -1,5 +1,6 @@
 package com.srishti.subscriber.service;
 
+import com.srishti.subscriber.dto.request.GeolocationRequest;
 import com.srishti.subscriber.dto.request.SubscriberRequest;
 import com.srishti.subscriber.dto.response.SubscriberResponse;
 import com.srishti.subscriber.entity.TemplateId;
@@ -10,8 +11,13 @@ import com.srishti.subscriber.mapper.SubscriberMapper;
 import com.srishti.subscriber.repository.SubscriberRepository;
 import com.srishti.subscriber.repository.TemplateIdRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +30,69 @@ public class SubscriberService {
     private final SubscriberRepository subscriberRepository;
 
     private final SubscriberMapper mapper;
+
+    public List<SubscriberResponse> registerList(Long ownerId, MultipartFile file) {
+        Workbook workbook;
+        try {
+            InputStream inputStream = file.getInputStream();
+            workbook = WorkbookFactory.create(inputStream);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error processing Excel file");
+        }
+        Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+
+        List<SubscriberRequest> subscriberList = readSubscriberListFromExcel(sheet);
+
+        List<SubscriberResponse> responses = new ArrayList<>();
+        for (SubscriberRequest request : subscriberList) {
+            SubscriberResponse response = register(ownerId, request);
+            responses.add(response);
+        }
+
+        return responses;
+    }
+
+    private List<SubscriberRequest> readSubscriberListFromExcel(Sheet sheet) {
+        List<SubscriberRequest> subscriberList = new ArrayList<>();
+
+        for (Row row : sheet) {
+            if (row == null) break;
+
+            try {
+                subscriberList.add(
+                        SubscriberRequest.builder()
+                        .name(getCellValue(row.getCell(0)))
+                        .email(getCellValue(row.getCell(1)))
+                        .phoneNumber(getCellValue(row.getCell(2)))
+                        .telegramId(getCellValue(row.getCell(3)))
+                        .geolocation(buildGeolocationRequest(row))
+                        .build());
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return subscriberList;
+    }
+
+    private String getCellValue(Cell cell) {
+        return cell != null ? cell.toString() : null;
+    }
+
+    private GeolocationRequest buildGeolocationRequest(Row row) {
+        Cell latitudeCell = row.getCell(4);
+        Cell longitudeCell = row.getCell(5);
+
+        if (latitudeCell != null && longitudeCell != null) {
+            return GeolocationRequest.builder()
+                    .latitude(Double.parseDouble(latitudeCell.toString()))
+                    .longitude(Double.parseDouble(longitudeCell.toString()))
+                    .build();
+        } else {
+            return null;
+        }
+    }
 
     public SubscriberResponse register(Long ownerId, SubscriberRequest request) {
         if(subscriberRepository.findByEmailAndOwnerId(request.email(), ownerId).isPresent()) {

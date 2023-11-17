@@ -22,5 +22,6 @@ sender-service/target/
 sender-service/src/test/
 
 .idea/
+.env
 
 

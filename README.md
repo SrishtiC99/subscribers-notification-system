@@ -6,6 +6,14 @@
 **Tech Stacks:**
 > `Maven Build System` `Spring boot Framework` `JWT Authentication` `postgresSQL DB` `Kafka Broker`
 
+- [ ] Handle Auth validation exception in API Gateway
+- [ ] Handle FeignClient exception in template-service/subscriber-service/notification-service
+- [x] Add Bulk Subscribers registration
+- [ ] Add integration test
+- [ ] Add swagger Api docs
+- [ ] Notification with Email
+- [ ] Notification with Telegram bot
+
 ### Discovery Server
 Spring Eureka server is used for service registry by which the API gateway would discover the network information of 
 other services.
