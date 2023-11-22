@@ -11,7 +11,7 @@
 - [x] User Registration/Authentication/Validation
 - [x] Handle Role Based Login
 - [x] Fetching user info from api requests and validating if they are a registered user or not
-- [ ] Validating if logged-in users have enough permission or not
+- [x] Validating if logged-in users have enough permission or not
 - [ ] Handle Auth validation exception in API Gateway
 - [x] Using FeignClient to make request to other services
 - [ ] Handle FeignClient exception in template-service/subscriber-service/notification-service
