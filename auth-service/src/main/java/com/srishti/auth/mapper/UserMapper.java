@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", expression = "java(Role.USER)")
     @Mapping(target = "password", expression = "java(encoder.encode(request.password()))")
     User mapToEntity(AuthRequest request, @Context PasswordEncoder encoder);
 }

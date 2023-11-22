@@ -33,7 +33,8 @@ public class User implements UserDetails, BaseEntity<Long> {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Builder.Default
+    private Role role = Role.USER;
 
     private String email;
 

@@ -9,7 +9,7 @@
 ### Functional Todos
 
 - [x] User Registration/Authentication/Validation
-- [ ] Handle Role Based Login
+- [x] Handle Role Based Login
 - [x] Fetching user info from api requests and validating if they are a registered user or not
 - [ ] Validating if logged-in users have enough permission or not
 - [ ] Handle Auth validation exception in API Gateway

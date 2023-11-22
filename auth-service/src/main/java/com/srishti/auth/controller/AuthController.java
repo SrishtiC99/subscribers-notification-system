@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/auth")
@@ -30,9 +32,9 @@ public class AuthController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Long> isTokenValid(
+    public ResponseEntity<Map<Long, String>> isTokenValid(
             @AuthenticationPrincipal User user) {
         System.out.println("Api gateway validating request: " + user.getEmail());
-        return ResponseEntity.ok(user.getId());
+        return ResponseEntity.ok(Map.of(user.getId(), user.getRole().getAuthority()));
     }
 }
