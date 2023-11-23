@@ -4,7 +4,8 @@
 > receive the notification on their preferred options (email/phone/telegram)
 
 **Tech Stacks:**
-> `Maven Build System` `Spring boot Framework` `JWT Authentication` `postgresSQL DB` `Kafka Broker` `junit`
+> `Maven Build System` `Spring boot Framework` `Spring Cloud` `JWT Authentication` `postgresSQL DB` `Kafka Broker` 
+> `Docker Containers` `junit`
 
 ### Functional Todos
 
@@ -12,7 +13,7 @@
 - [x] Handle Role Based Login
 - [x] Fetching user info from api requests and validating if they are a registered user or not
 - [x] Validating if logged-in users have enough permission or not
-- [ ] Handle Auth validation exception in API Gateway
+- [ ] Handle custom webFlux exception in API Gateway
 - [x] Using FeignClient to make request to other services
 - [ ] Handle FeignClient exception in template-service/subscriber-service/notification-service
 - [x] Using Kafka to send events to other services
@@ -22,7 +23,8 @@
 - [ ] Add integration test - Template service
 - [x] Add Unit test - Template service
 - [ ] Add swagger Api docs
-- [ ] Notification with Email/Telegram
+- [ ] Send Notification to Subscriber via Telegram
+- [ ] Send Notification to Subscriber via Email
 
 ### Non-Functional Todos
 
@@ -30,14 +32,14 @@
 - [ ] Improve Kafka events calls
 
 ### Discovery Server
-Spring Eureka server is used for service registry by which the API gateway would discover the network information of 
+ - Spring Eureka server is used for service registry by which the API gateway would discover the network information of 
 other services.
 
 ### API Gateway
-Spring Cloud gateway is used for validating the api requests and directing it to the correct service. 
+- Spring Cloud gateway is used for validating the api requests and directing it to the correct service. 
 
 ### Auth Service
-- New User Registration, User Authentication, JWT Token Validation
+- New User Registration, User Authentication, JWT Token Validation, Fetching User details from JWT token
 
 ### Template Service
 - Create/Delete/Get a Template
