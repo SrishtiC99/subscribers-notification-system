@@ -23,13 +23,14 @@
 - [ ] Add integration test - Template service
 - [x] Add Unit test - Template service
 - [ ] Add swagger Api docs
-- [ ] Send Notification to Subscriber via Telegram
+- [x] Send Notification to Subscriber via Telegram
 - [ ] Send Notification to Subscriber via Email
 
 ### Non-Functional Todos
 
 - [ ] Improve Database calls
 - [ ] Improve Kafka events calls
+- [ ] Hide security tokens 
 
 ### Discovery Server
  - Spring Eureka server is used for service registry by which the API gateway would discover the network information of 
@@ -54,3 +55,5 @@ other services.
 
 ### Sender Service 
 - Receiving notifications sent from notification service and forwarding them to the subscriber's email/phone/telegram
+- User Registration on Telegram Bot
+- Fetching chatId from Telegram Bot and saving it to the database for using it to notify user

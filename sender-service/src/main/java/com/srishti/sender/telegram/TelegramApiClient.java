@@ -11,6 +11,6 @@ public interface TelegramApiClient {
 
     @PostMapping(value = "/bot{token}/sendMessage")
     Message sendMessage(@PathVariable String token,
-                        @RequestParam("chat_id") String chatId,
+                        @RequestParam("chat_id") Long chatId,
                         @RequestParam("text") String content);
 }
