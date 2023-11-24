@@ -1,13 +1,18 @@
 package com.srishti.sender.kafka;
 
 import com.srishti.sender.dto.NotificationKafkaDto;
+import com.srishti.sender.telegram.TelegramNotificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @EnableKafka
+@RequiredArgsConstructor
 public class KafkaListeners {
+
+    private final TelegramNotificationService telegramNotificationService;
 
     @KafkaListener(
             topics = "email-topic",
@@ -33,6 +38,6 @@ public class KafkaListeners {
             containerFactory = "notifySubscriberKafkaListenerFactory"
     )
     public void telegramNotificationListener(NotificationKafkaDto kafkaDto) {
-        System.out.println(kafkaDto.credential());
+        telegramNotificationService.sendMessage(kafkaDto.credential(), kafkaDto);
     }
 }
