@@ -32,6 +32,10 @@ public class Notification implements BaseEntity<Long>{
 
     private String credential;
 
+    private String title;
+
+    private String messageBody;
+
     @Builder.Default
     private NotificationStatus status = NotificationStatus.NEW;
 

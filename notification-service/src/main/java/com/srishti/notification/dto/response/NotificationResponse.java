@@ -9,6 +9,7 @@ public record NotificationResponse(
         Long id,
         Long ownerId,
         String credential,
+        String title,
         String messageBody,
         Integer retryAttempts,
         LocalDateTime createdAt,

@@ -46,6 +46,7 @@ public class NotificationService {
        notifyKafkaEventService.notifyAll(SubscriberListKafkaDto.builder()
                .ownerId(ownerId)
                .subscriberIds(subscriberIds)
+               .title(templateResponse.title())
                .messageBody(templateResponse.content())
                .build());
 

@@ -39,11 +39,11 @@ public class NotifyKafkaEventService {
         for (Long subscriberId: kafkaDto.subscriberIds()) {
             SubscriberResponse subscriberResponse = subscriberClient.getSubscriberById(ownerId, subscriberId).getBody();
             sendNotificationByCredential(subscriberResponse::email, NotificationType.EMAIL,
-                    ownerId, kafkaDto.messageBody(), EMAIL_TOPIC);
+                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), EMAIL_TOPIC);
             sendNotificationByCredential(subscriberResponse::phoneNumber, NotificationType.PHONE,
-                    ownerId, kafkaDto.messageBody(), PHONE_TOPIC);
+                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), PHONE_TOPIC);
             sendNotificationByCredential(subscriberResponse::telegramId, NotificationType.TELEGRAM,
-                    ownerId, kafkaDto.messageBody(), TELEGRAM_TOPIC);
+                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), TELEGRAM_TOPIC);
         }
     }
 
@@ -51,6 +51,7 @@ public class NotifyKafkaEventService {
             Supplier<String> supplier,
             NotificationType type,
             Long ownerId,
+            String title,
             String body,
             String topic
             ) {
@@ -61,13 +62,14 @@ public class NotifyKafkaEventService {
             NotificationResponse notificationResponse = notificationService.createNotification(
                     NotificationRequest.builder()
                             .ownerId(ownerId)
+                            .title(title)
                             .messageBody(body)
                             .credential(credential)
                             .type(type)
                             .build());
             // map to kafka notification
             NotificationKafkaDto kafkaDto = mapper.mapToKafka(notificationResponse);
-            System.out.println("sending: " + topic + " " + credential);
+            System.out.println("sending notification: " + kafkaDto);
             kafkaTemplate.send(topic, kafkaDto);
         }
     }

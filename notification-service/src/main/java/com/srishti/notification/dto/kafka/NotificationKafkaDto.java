@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public record NotificationKafkaDto (  //TODO: ADD Template Info
         Long id,
         Long ownerId,
+        String title,
         String messageBody,
         NotificationType type,
         NotificationStatus status,

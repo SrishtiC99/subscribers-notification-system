@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public record NotificationRequest(
         Long ownerId,
+        String title,
         String messageBody,
         String credential,
         NotificationType type

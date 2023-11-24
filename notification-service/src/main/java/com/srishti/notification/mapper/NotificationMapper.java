@@ -21,7 +21,6 @@ public interface NotificationMapper extends
     Notification mapToEntity(NotificationRequest request);
 
     @Override
-    @Mapping(target = "messageBody", ignore = true)
     NotificationResponse mapToResponse(Notification notification);
 
     NotificationKafkaDto mapToKafka(NotificationResponse notificationResponse);

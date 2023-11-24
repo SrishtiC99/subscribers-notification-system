@@ -8,6 +8,7 @@ import java.util.List;
 public record SubscriberListKafkaDto(
         Long ownerId,
         List<Long> subscriberIds,
+        String title,
         String messageBody
 ) {
 }
