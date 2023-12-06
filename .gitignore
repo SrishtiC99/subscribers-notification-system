@@ -20,6 +20,9 @@ notification-service/src/test/
 sender-service/target/
 sender-service/src/test/
 
+billing-service/target/
+billing-service/src/test/
+
 .idea/
 .env
 

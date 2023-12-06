@@ -57,3 +57,14 @@ other services.
 - Receiving notifications sent from notification service and forwarding them to the subscriber's email/phone/telegram
 - User Registration on Telegram Bot
 - Fetching chatId from Telegram Bot and saving it to the database for using it to notify user
+
+### Billing Service
+- A billing account of all users
+- Track account bills for owners: if not settled disable account (Service Owner's side)
+- Track account bills for Subscribers: if not settled remove from templates (Owner's side)
+
+> &emsp; Todos
+> - [ ] &ensp; Send Notification to user after renewing notification
+> - [ ] &ensp; Add other aspects of account billing (like bank details)
+> - [ ] &emsp; Handle billing for template subscribers
+> - [ ] &ensp; update template subscriber's list based on bill settlement
