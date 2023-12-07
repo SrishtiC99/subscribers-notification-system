@@ -29,8 +29,7 @@ public class BillingAccount {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private AccountType accountType = AccountType.OWNER;
-
+    private AccountType accountType = AccountType.USER;
     @Builder.Default
     private Boolean isExpired = false;
 
@@ -47,6 +46,11 @@ public class BillingAccount {
     public BillingAccount renewAccount() {
         setIsExpired(false);
         setLastBillingDate(new Date(System.currentTimeMillis()));
+        return this;
+    }
+
+    public BillingAccount upgradeAccount(AccountType accountType) {
+        setAccountType(accountType);
         return this;
     }
 

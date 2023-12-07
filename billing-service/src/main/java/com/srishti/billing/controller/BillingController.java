@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/billing")
+@RequestMapping("api/v2/billing")
 @RequiredArgsConstructor
 public class BillingController {
     private final BillingService billingService;
@@ -22,5 +22,10 @@ public class BillingController {
     @PostMapping("/renew")
     ResponseEntity<BillingAccountResponse> renew(@RequestHeader Long ownerId) {
         return ResponseEntity.ok(billingService.renewAccount(ownerId));
+    }
+
+    @PatchMapping("/upgrade/owner")
+    ResponseEntity<BillingAccountResponse> upgradeAccountToOwner(@RequestHeader Long ownerId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(billingService.upgradeAccountToOwner(ownerId));
     }
 }

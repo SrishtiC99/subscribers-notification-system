@@ -7,6 +7,7 @@ import com.srishti.auth.exception.user.UserBadCredentialsException;
 import com.srishti.auth.exception.user.UserEmailAlreadyExistsException;
 import com.srishti.auth.exception.user.UserNotFoundException;
 import com.srishti.auth.mapper.UserMapper;
+import com.srishti.auth.model.Role;
 import com.srishti.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -75,5 +76,12 @@ public class AuthService implements UserDetailsService {
     public User loadUserByUsername(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User ${email} not found"));
+    }
+
+    public Boolean updateUserRole(Long userId, Role role) {
+        userRepository.findById(userId)
+                .map(user -> user.updateRole(role))
+                .map(userRepository::saveAndFlush);
+        return true;
     }
 }

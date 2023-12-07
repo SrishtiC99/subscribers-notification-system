@@ -40,6 +40,11 @@ public class User implements UserDetails, BaseEntity<Long> {
 
     private String password;
 
+    public User updateRole(Role role) {
+        setRole(role);
+        return this;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(role);
