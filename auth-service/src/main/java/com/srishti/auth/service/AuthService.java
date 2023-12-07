@@ -1,5 +1,6 @@
 package com.srishti.auth.service;
 
+import com.srishti.auth.dto.kafka.NewAccountEventDto;
 import com.srishti.auth.dto.request.AuthRequest;
 import com.srishti.auth.dto.response.TokenResponse;
 import com.srishti.auth.entity.User;
@@ -11,6 +12,7 @@ import com.srishti.auth.model.Role;
 import com.srishti.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -31,6 +33,10 @@ public class AuthService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final KafkaTemplate<String, NewAccountEventDto> template;
+
+    private final String NEW_ACCOUNT_TOPIC = "billing-account-topic";
+
     private final TokenService tokenService;
 
     private final JwtService jwtService;
@@ -48,6 +54,13 @@ public class AuthService implements UserDetailsService {
                 })
                 .map(req -> mapper.mapToEntity(req, passwordEncoder))
                 .map(userRepository::saveAndFlush)
+                .map(user -> {
+                    template.send(NEW_ACCOUNT_TOPIC, NewAccountEventDto.builder()
+                            .userId(user.getId())
+                            .email(user.getEmail())
+                            .build());
+                    return user;
+                })
                 .isPresent();
     }
 
