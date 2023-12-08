@@ -27,9 +27,11 @@ public class KafkaListeners {
                         .notificationPreferences(
                                 NotificationPreferencesRequest.builder()
                                         .email(kafkaDto.email())
-                                        .build()
-                        )
+                                        .telegramId(kafkaDto.telegramId())
+                                        .phoneNumber(kafkaDto.phoneNumber())
+                                        .build())
+                        .accountType(kafkaDto.accountType())
                         .build());
-        System.out.println("Billing account created for userid: " + kafkaDto.userId());
+        System.out.println("Billing account created for " + kafkaDto.accountType() + ": " + kafkaDto.userId());
     }
 }

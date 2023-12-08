@@ -1,6 +1,5 @@
-package com.srishti.billing.dto.kafka;
+package com.srishti.subscriber.dto.kafka;
 
-import com.srishti.billing.model.AccountType;
 import lombok.Builder;
 
 @Builder

@@ -1,5 +1,7 @@
 package com.srishti.subscriber.service;
 
+import com.srishti.subscriber.dto.kafka.AccountType;
+import com.srishti.subscriber.dto.kafka.NewAccountEventDto;
 import com.srishti.subscriber.dto.request.GeolocationRequest;
 import com.srishti.subscriber.dto.request.SubscriberRequest;
 import com.srishti.subscriber.dto.response.SubscriberResponse;
@@ -12,6 +14,7 @@ import com.srishti.subscriber.repository.SubscriberRepository;
 import com.srishti.subscriber.repository.TemplateIdRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +31,10 @@ public class SubscriberService {
     private final TemplateIdRepository templateIdRepository;
 
     private final SubscriberRepository subscriberRepository;
+
+    private final KafkaTemplate<String, NewAccountEventDto> kafkaTemplate;
+
+    private final String NEW_SUBSCRIBER_TOPIC = "billing-account-topic";
 
     private final SubscriberMapper mapper;
 
@@ -103,6 +110,16 @@ public class SubscriberService {
                 .map(mapper::mapToEntity)
                 .map(subscriber -> subscriber.addOwner(ownerId))
                 .map(subscriberRepository::save)
+                .map(subscriber -> {
+                    kafkaTemplate.send(NEW_SUBSCRIBER_TOPIC, NewAccountEventDto.builder()
+                                    .userId(subscriber.getId())
+                                    .email(subscriber.getEmail())
+                                    .telegramId(subscriber.getTelegramId())
+                                    .phoneNumber(subscriber.getPhoneNumber())
+                                    .accountType(AccountType.SUBSCRIBER)
+                            .build());
+                    return subscriber;
+                })
                 .map(mapper::mapToResponse)
                 .orElseThrow(() -> new SubscriberRegistrationException("Registration failed: " + request.email()));
 

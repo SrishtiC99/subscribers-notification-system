@@ -8,6 +8,7 @@ import com.srishti.auth.exception.user.UserBadCredentialsException;
 import com.srishti.auth.exception.user.UserEmailAlreadyExistsException;
 import com.srishti.auth.exception.user.UserNotFoundException;
 import com.srishti.auth.mapper.UserMapper;
+import com.srishti.auth.model.AccountType;
 import com.srishti.auth.model.Role;
 import com.srishti.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +59,7 @@ public class AuthService implements UserDetailsService {
                     template.send(NEW_ACCOUNT_TOPIC, NewAccountEventDto.builder()
                             .userId(user.getId())
                             .email(user.getEmail())
+                            .accountType(AccountType.USER)
                             .build());
                     return user;
                 })

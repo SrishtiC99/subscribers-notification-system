@@ -57,4 +57,9 @@ public class BillingService {
                 .map(mapper::mapToResponse)
                 .orElseThrow(); // TODO: Handle exception
     }
+
+    public Boolean isAccountExpired(Long ownerId) {
+        return billingRepository.findByAccountHolderId(ownerId)
+                .get().getIsExpired();
+    }
 }
