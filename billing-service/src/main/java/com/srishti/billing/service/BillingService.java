@@ -3,6 +3,7 @@ package com.srishti.billing.service;
 import com.srishti.billing.dto.kafka.SubscriptionUpdateEventDto;
 import com.srishti.billing.dto.request.BillingAccountRequest;
 import com.srishti.billing.dto.response.BillingAccountResponse;
+import com.srishti.billing.entity.BillingAccount;
 import com.srishti.billing.mapper.BillingAccountMapper;
 import com.srishti.billing.model.AccountType;
 import com.srishti.billing.repository.BillingRepository;
@@ -42,9 +43,11 @@ public class BillingService {
 
     public BillingAccountResponse renewAccount(Long ownerId) {
         return billingRepository.findByAccountHolderId(ownerId)
-                .map(billingAccount -> billingAccount.renewAccount())
+                .map(BillingAccount::renewAccount)
+                .map(billingRepository::save)
                 .map(mapper::mapToResponse)
                 .orElseThrow(); // TODO: Handle exception
+        //TODO: Send a notification to the user that their subscription has been renewed
     }
 
     public BillingAccountResponse upgradeAccountToOwner(Long userId) {
@@ -78,6 +81,7 @@ public class BillingService {
                     })
                     .map(billingRepository::save);
             log.warn("Owner Account suspended: {}", id);
+            //TODO: Send a notification to the user for subscription renewal
         }
     }
 }
