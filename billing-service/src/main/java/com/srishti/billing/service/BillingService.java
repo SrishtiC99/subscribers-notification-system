@@ -1,6 +1,5 @@
 package com.srishti.billing.service;
 
-import com.srishti.billing.client.AuthClient;
 import com.srishti.billing.dto.kafka.SubscriptionUpdateEventDto;
 import com.srishti.billing.dto.request.BillingAccountRequest;
 import com.srishti.billing.dto.response.BillingAccountResponse;
@@ -8,13 +7,17 @@ import com.srishti.billing.mapper.BillingAccountMapper;
 import com.srishti.billing.model.AccountType;
 import com.srishti.billing.repository.BillingRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BillingService {
 
     private final BillingRepository billingRepository;
@@ -61,5 +64,20 @@ public class BillingService {
     public Boolean isAccountExpired(Long ownerId) {
         return billingRepository.findByAccountHolderId(ownerId)
                 .get().getIsExpired();
+    }
+
+    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Kolkata")
+    public void suspendExpiredOwnersAccount() {
+        log.info("suspendExpiredOwnersAccount() task started");
+        List<Long> expiredOwnerIds = billingRepository.findExpiredAccounts(AccountType.OWNER.toString());
+        for(Long id: expiredOwnerIds) {
+            billingRepository.findByAccountHolderId(id)
+                    .map(billingAccount -> {
+                        billingAccount.setIsExpired(true);
+                        return billingAccount;
+                    })
+                    .map(billingRepository::save);
+            log.warn("Owner Account suspended: {}", id);
+        }
     }
 }
