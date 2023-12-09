@@ -1,10 +1,15 @@
 package com.srishti.gateway.filter;
 
+import com.srishti.gateway.exception.UserInvalidAuthenticationException;
+import com.srishti.gateway.exception.UserNotAuthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +27,9 @@ public class AuthenticationGatewayFilterFactory extends
 
     @Value("${urls.validate}")
     private String validateUrl;
+
+    @Value("${urls.checkExpiry}")
+    private String checkExpiryUrl;
 
     public AuthenticationGatewayFilterFactory(RouteValidator validator, RestTemplate restTemplate) {
         super(Config.class);
@@ -43,10 +51,13 @@ public class AuthenticationGatewayFilterFactory extends
                         String role = entry.getValue();
 
                         // Perform role-based access control
-                        if ("OWNER".equals(role) && !exchange.getRequest().getURI().getPath().startsWith("/api/v1")) {
-                            throw new RuntimeException("Request failed with status code: " + HttpStatus.FORBIDDEN);
-                        } else if ("SUBSCRIBER".equals(role) && !exchange.getRequest().getURI().getPath().startsWith("/api/v2")) {
-                            throw new RuntimeException("Request failed with status code: " + HttpStatus.FORBIDDEN);
+                        // TODO: use appropriate exceptions
+                        if (!role.equals("OWNER") && exchange.getRequest().getURI().getPath().startsWith("/api/v1")) {
+                            throw new UserNotAuthorizedException("You are not an Owner");
+                        }
+                        if (role.equals("OWNER") && isUserAccountExpired(userId)) {
+                            throw new UserNotAuthorizedException("Your Account Subscription is expired. " +
+                                    "Please contact to billing team");
                         }
                         ServerHttpRequest request = addUserHeaders(userId, exchange);
                         return chain.filter(
@@ -56,7 +67,7 @@ public class AuthenticationGatewayFilterFactory extends
                         );
                     }
                 } else {
-                    throw new RuntimeException("Request failed with status code: " + responseEntity.getStatusCode());
+                    throw new UserInvalidAuthenticationException("Invalid credentials");
                 }
             }
             return chain.filter(
@@ -83,5 +94,24 @@ public class AuthenticationGatewayFilterFactory extends
                 .mutate()
                 .header("ownerId", String.valueOf(userId))
                 .build();
+    }
+
+    private boolean isUserAccountExpired(Long userId) {
+        System.out.println("started");
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("ownerId", userId.toString());
+        RequestEntity<Void> requestEntity = new RequestEntity<>(headers,
+                HttpMethod.GET,
+                URI.create(checkExpiryUrl));
+        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(requestEntity,
+                new ParameterizedTypeReference<Boolean>() {});
+        System.out.println(responseEntity);
+        return responseEntity.getBody()!=null && responseEntity.getBody();
+    }
+
+    public static class AccountExpiredException extends RuntimeException {
+        public AccountExpiredException(String message) {
+            super(message);
+        }
     }
 }

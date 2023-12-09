@@ -10,21 +10,22 @@
 ### Functional Todos
 
 - [x] User Registration/Authentication/Validation
-- [x] Handle Role Based Login
+- [x] creating billing account for all new user/subscriber registration event
+- [x] Handle Role Based Login, update role via kafka when subscription is updated in billing
 - [x] Fetching user info from api requests and validating if they are a registered user or not
-- [x] Validating if logged-in users have enough permission or not
-- [ ] Handle custom webFlux exception in API Gateway
-- [x] Using FeignClient to make request to other services
-- [ ] Handle FeignClient exception in template-service/subscriber-service/notification-service
+- [x] Validating if logged-in users have enough permission or not, checking account expiry
+- [ ] Handle custom exception in API Gateway and FeignClient exception in other services
 - [x] Using Kafka to send events to other services
 - [x] Owner can add/remove/get/update subscribers
 - [x] Owner can add/remove subscribers to a template
-- [x] Add Bulk Subscribers registration
+- [x] Add Bulk Subscribers registrationg
 - [ ] Add integration test - Template service
 - [x] Add Unit test - Template service
 - [ ] Add swagger Api docs
 - [x] Send Notification to Subscriber via Telegram
 - [ ] Send Notification to Subscriber via Email
+- [x] Scheduling event to suspend expired owners
+- [x] Billing account subscription renewal
 
 ### Non-Functional Todos
 

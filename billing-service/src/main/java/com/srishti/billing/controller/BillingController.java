@@ -28,4 +28,9 @@ public class BillingController {
     ResponseEntity<BillingAccountResponse> upgradeAccountToOwner(@RequestHeader Long ownerId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(billingService.upgradeAccountToOwner(ownerId));
     }
+
+    @GetMapping("/expiry")
+    ResponseEntity<Boolean> isAccountExpired(@RequestHeader Long ownerId) {
+        return ResponseEntity.ok(billingService.isAccountExpired(ownerId));
+    }
 }
