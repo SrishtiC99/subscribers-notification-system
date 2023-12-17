@@ -9,7 +9,9 @@ import com.srishti.notification.dto.response.SubscriberResponse;
 import com.srishti.notification.mapper.NotificationMapper;
 import com.srishti.notification.model.NotificationType;
 import com.srishti.notification.service.NotificationService;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NotifyKafkaEventService {
 
     private final KafkaTemplate<String, NotificationKafkaDto> kafkaTemplate;
@@ -37,13 +40,18 @@ public class NotifyKafkaEventService {
         Long ownerId = kafkaDto.ownerId();
 
         for (Long subscriberId: kafkaDto.subscriberIds()) {
-            SubscriberResponse subscriberResponse = subscriberClient.getSubscriberById(ownerId, subscriberId).getBody();
-            sendNotificationByCredential(subscriberResponse::email, NotificationType.EMAIL,
-                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), EMAIL_TOPIC);
-            sendNotificationByCredential(subscriberResponse::phoneNumber, NotificationType.PHONE,
-                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), PHONE_TOPIC);
-            sendNotificationByCredential(subscriberResponse::telegramId, NotificationType.TELEGRAM,
-                    ownerId, kafkaDto.title(), kafkaDto.messageBody(), TELEGRAM_TOPIC);
+            try {
+                SubscriberResponse subscriberResponse = subscriberClient.getSubscriberById(ownerId, subscriberId).getBody();
+                sendNotificationByCredential(subscriberResponse::email, NotificationType.EMAIL,
+                        ownerId, kafkaDto.title(), kafkaDto.messageBody(), EMAIL_TOPIC);
+                sendNotificationByCredential(subscriberResponse::phoneNumber, NotificationType.PHONE,
+                        ownerId, kafkaDto.title(), kafkaDto.messageBody(), PHONE_TOPIC);
+                sendNotificationByCredential(subscriberResponse::telegramId, NotificationType.TELEGRAM,
+                        ownerId, kafkaDto.title(), kafkaDto.messageBody(), TELEGRAM_TOPIC);
+            }
+            catch (FeignException.NotFound ex) {
+                log.error("No subscriber found with id: " + subscriberId);
+            }
         }
     }
 

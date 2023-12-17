@@ -10,6 +10,7 @@ import com.srishti.notification.exception.template.TemplateNotFoundException;
 import com.srishti.notification.exception.template.TemplateSubscribersNotFoundException;
 import com.srishti.notification.mapper.NotificationMapper;
 import com.srishti.notification.repository.NotificationRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,10 @@ public class NotificationService {
     private final NotificationMapper mapper;
 
     public String sendNotificationToAllSubscribers(Long ownerId, Long templateId) {
-        TemplateResponse templateResponse = templateClient.getTemplateByIdAndByOwnerId(ownerId, templateId)
-                .getBody();
-        if (templateResponse == null) {
+        TemplateResponse templateResponse;
+        try {
+            templateResponse = templateClient.getTemplateByIdAndByOwnerId(ownerId, templateId).getBody();
+        } catch (FeignException.NotFound ex) {
             throw new TemplateNotFoundException("Template not found with id: " + templateId);
         }
 

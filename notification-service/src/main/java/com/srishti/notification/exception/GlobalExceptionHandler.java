@@ -2,6 +2,7 @@ package com.srishti.notification.exception;
 
 import com.srishti.notification.dto.response.ErrorResponse;
 import com.srishti.notification.exception.template.TemplateNotFoundException;
+import com.srishti.notification.exception.template.TemplateSubscribersNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -32,7 +33,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            TemplateNotFoundException.class
+            TemplateNotFoundException.class,
+            TemplateSubscribersNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFound(Exception e, WebRequest request) {
         return generateDefaultErrorMessage(e, NOT_FOUND, request);
