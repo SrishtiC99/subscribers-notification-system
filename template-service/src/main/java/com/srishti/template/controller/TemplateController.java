@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/templates")
+@RequestMapping("/api/v1/templates")
 public class TemplateController {
 
     private final TemplateService templateService;
@@ -21,6 +23,14 @@ public class TemplateController {
             @RequestHeader Long ownerId,
             @RequestBody @Valid TemplateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(templateService.create(ownerId, request));
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<TemplateResponse>> getAll(
+            @RequestHeader Long ownerId
+    ) {
+        System.out.println("controller: ");
+        return ResponseEntity.status(HttpStatus.OK).body(templateService.getAll(ownerId));
     }
 
     @GetMapping("/{id}")

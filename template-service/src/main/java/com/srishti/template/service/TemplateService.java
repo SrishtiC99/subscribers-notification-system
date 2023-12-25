@@ -12,6 +12,7 @@ import com.srishti.template.repository.TemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,13 @@ public class TemplateService {
                 .map(templateRepository::save)
                 .map(template -> mapper.mapToResponse(template, subscriberClient))
                 .orElseThrow(() -> new TemplateCreationException("msg"));
+    }
+
+    public List<TemplateResponse> getAll(Long ownerId) {
+        System.out.println("getAll: ");
+        return templateRepository.findAllByOwnerId(ownerId)
+                .stream().map(mapper::mapToResponse)
+                .toList();
     }
 
     public TemplateResponse get(Long ownerId, Long templateId) {
