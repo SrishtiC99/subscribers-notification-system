@@ -1,5 +1,6 @@
 package com.srishti.template.controller;
 
+import com.srishti.template.advice.TrackExecutionTime;
 import com.srishti.template.dto.request.SubscriberListRequest;
 import com.srishti.template.dto.response.TemplateResponse;
 import com.srishti.template.service.TemplateSubscribersService;
@@ -16,6 +17,7 @@ public class TemplateSubscribersController {
     private final TemplateSubscribersService templateSubscribersService;
 
     @PostMapping("/{id}/subscribers")
+    @TrackExecutionTime
     public ResponseEntity<TemplateResponse> addSubscriber(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId,
@@ -24,6 +26,7 @@ public class TemplateSubscribersController {
     }
 
     @DeleteMapping("/{id}/subscribers")
+    @TrackExecutionTime
     public ResponseEntity<TemplateResponse> removeSubscriber(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId,

@@ -1,5 +1,6 @@
 package com.srishti.template.controller;
 
+import com.srishti.template.advice.TrackExecutionTime;
 import com.srishti.template.dto.request.TemplateRequest;
 import com.srishti.template.dto.response.TemplateResponse;
 import com.srishti.template.service.TemplateService;
@@ -19,6 +20,7 @@ public class TemplateController {
     private final TemplateService templateService;
 
     @PostMapping("/")
+    @TrackExecutionTime
     public ResponseEntity<TemplateResponse> create(
             @RequestHeader Long ownerId,
             @RequestBody @Valid TemplateRequest request) {
@@ -26,6 +28,7 @@ public class TemplateController {
     }
 
     @GetMapping("/")
+    @TrackExecutionTime
     public ResponseEntity<List<TemplateResponse>> getAll(
             @RequestHeader Long ownerId
     ) {
@@ -34,6 +37,7 @@ public class TemplateController {
     }
 
     @GetMapping("/{id}")
+    @TrackExecutionTime
     public ResponseEntity<TemplateResponse> get(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId) {
@@ -41,6 +45,7 @@ public class TemplateController {
     }
 
     @DeleteMapping("/{id}")
+    @TrackExecutionTime
     public ResponseEntity<Boolean> delete(
             @RequestHeader Long ownerId,
             @PathVariable("id") Long templateId) {
