@@ -33,4 +33,9 @@ public class BillingController {
     ResponseEntity<Boolean> isAccountExpired(@RequestHeader Long ownerId) {
         return ResponseEntity.ok(billingService.isAccountExpired(ownerId));
     }
+
+    @GetMapping("/")
+    ResponseEntity<BillingAccountResponse> get(@RequestHeader Long ownerId) {
+        return ResponseEntity.ok(billingService.get(ownerId));
+    }
 }

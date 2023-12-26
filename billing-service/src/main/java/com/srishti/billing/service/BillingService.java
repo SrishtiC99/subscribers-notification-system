@@ -84,4 +84,10 @@ public class BillingService {
             //TODO: Send a notification to the user for subscription renewal
         }
     }
+
+    public BillingAccountResponse get(Long ownerId) {
+        return billingRepository.findByAccountHolderId(ownerId)
+                .map(mapper::mapToResponse)
+                .orElseThrow();
+    }
 }
